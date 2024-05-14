@@ -1,0 +1,38 @@
+import requests
+import xml.etree.ElementTree as ET
+import json
+
+# Веб-адрес XML
+url = 'http://192.168.31.231:61220/xml'
+
+# Получение данных XML
+response = requests.get(url)
+
+# Проверка успешного получения данных
+if response.status_code == 200:
+    # Парсинг XML
+    root = ET.fromstring(response.content)
+
+    # Поиск всех секций Hard_Disk_Summary
+    hard_disk_summaries = root.findall('.//Hard_Disk_Summary')
+
+    # Обработка каждой секции Hard_Disk_Summary
+    for idx, hard_disk_summary in enumerate(hard_disk_summaries):
+        summary = {}
+        summary['Hard_Disk_Summary'] = idx + 1
+        for elem in hard_disk_summary:
+            summary[elem.tag] = elem.text
+
+        # Преобразование отдельного блока в JSON
+        json_output = json.dumps(summary, indent=4, ensure_ascii=False)
+
+        # Имя файла для сохранения блока
+        file_name = f'disk_{idx + 1}.json'
+
+        # Сохранение JSON в файл
+        with open(file_name, 'w', encoding='utf-8') as file:
+            file.write(json_output)
+
+    print("Все файлы были успешно созданы.")
+else:
+    print(f'Не удалось получить данные. Код ответа: {response.status_code}')
