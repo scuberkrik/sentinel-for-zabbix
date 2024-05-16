@@ -1,9 +1,17 @@
+import os
 import requests
 import xml.etree.ElementTree as ET
 import json
 
 # Веб-адрес XML
-url = 'http://192.168.31.231:61220/xml'
+url = 'http://127.0.0.1:61220/xml'
+
+# Директория для сохранения файлов
+output_dir = 'C:\\SentinelForZabbix\\disks'
+
+# Создание директории, если она не существует
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 # Получение данных XML
 response = requests.get(url)
@@ -27,7 +35,7 @@ if response.status_code == 200:
         json_output = json.dumps(summary, indent=4, ensure_ascii=False)
 
         # Имя файла для сохранения блока
-        file_name = f'disk_{idx + 1}.json'
+        file_name = os.path.join(output_dir, f'disk_{idx + 1}.json')
 
         # Сохранение JSON в файл
         with open(file_name, 'w', encoding='utf-8') as file:
