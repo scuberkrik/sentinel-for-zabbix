@@ -72,3 +72,11 @@ if os.path.exists(original_conf_path):
 # Копирование нового конфигурационного файла в директорию назначения
 shutil.copy(new_conf_path, destination_dir)
 print(f'Скопирован файл из {new_conf_path} в {destination_dir}')
+
+# Пути к исходному и целевому файлам pars_xml.py
+source_file = os.path.join(os.getcwd(), 'service.py')
+destination_dir = 'C:\\SentinelForZabbix'
+
+# Копирование файла pars_xml.py в целевую директорию
+shutil.copy(source_file, destination_dir)
+print(f'Скопирован файл {source_file} в {destination_dir}')
